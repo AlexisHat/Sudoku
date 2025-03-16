@@ -1,24 +1,17 @@
 <!DOCTYPE html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html lang="de">
 <head>
     <meta charset="UTF-8">
     <title>Sudoku Spiel</title>
-    <link rel="stylesheet" th:href="@{/styles.css}">
+    <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-<div class="container">
-    <h1>Willkommen beim Sudoku Spiel</h1>
-    <p>Wähle eine Schwierigkeit und starte ein neues Spiel:</p>
+<h1>Sudoku Spiel</h1>
+<div class="board" id="board"></div>
+<button onclick="checkSolution()">Lösung prüfen</button>
+<button onclick="resetGame()">Zurücksetzen</button>
+<p id="message"></p>
 
-    <form action="/start-game" method="post">
-        <label for="difficulty">Schwierigkeit:</label>
-        <select id="difficulty" name="difficulty">
-            <option value="1">Leicht</option>
-            <option value="2">Mittel</option>
-            <option value="3">Schwer</option>
-        </select>
-        <button type="submit">Neues Spiel starten</button>
-    </form>
-</div>
+<script src="sudoku.js"></script>
 </body>
 </html>

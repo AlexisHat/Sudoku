@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <title>Sudoku Spiel</title>
+  <link rel="stylesheet" th:href="@{/templates/styles.css}">
+</head>
+<body>
+<div class="container">
+  <h1>Sudoku Spiel</h1>
+  <table class="sudoku-board">
+    <tr th:each="row, rowStat : ${sudokuBoard}">
+      <td th:each="cell : ${row}" th:text="${cell == 0 ? '' : cell}"></td>
+    </tr>
+  </table>
+  <a href="/">Zurück zur Startseite</a>
+</div>
+</body>
+</html>

@@ -156,5 +156,9 @@ public class SudokuGame {
         }
         System.out.println("+-------+-------+-------+");
     }
+
+    public int[][] getGameBoard() {
+        return gameBoard;
+    }
 }
 

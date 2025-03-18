@@ -49,7 +49,7 @@ public class SudokuService {
             for (int j = 0; j < 3; j++) {
                 int num = board[startRow + i][startCol + j];
                 if (num != 0) {
-                    if (seen[num - 1]) return false; // Zahl schon gesehen → Fehler
+                    if (seen[num - 1]) return false;
                     seen[num - 1] = true;
                 }
             }

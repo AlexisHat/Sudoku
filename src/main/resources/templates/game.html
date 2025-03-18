@@ -3,16 +3,29 @@
 <head>
   <meta charset="UTF-8">
   <title>Sudoku Spiel</title>
-  <link rel="stylesheet" th:href="@{/templates/styles.css}">
+  <link rel="stylesheet" th:href="@{/styles.css}">
+  <script defer th:src="@{/sudoku.js}"></script>
 </head>
 <body>
 <div class="container">
   <h1>Sudoku Spiel</h1>
-  <table class="sudoku-board">
+
+  <table class="sudoku-board" id="board">
     <tr th:each="row, rowStat : ${sudokuBoard}">
-      <td th:each="cell : ${row}" th:text="${cell == 0 ? '' : cell}"></td>
+      <td th:each="cell, colStat : ${row}">
+        <input type="text"
+               class="cell"
+               th:value="${cell == 0 ? '' : cell}"
+               th:attr="data-row=${rowStat.index}, data-col=${colStat.index}"
+               th:disabled="${cell != 0}" />
+      </td>
     </tr>
   </table>
+
+  <button onclick="checkSolution()">Lösung prüfen</button>
+  <button onclick="resetGame()">Zurücksetzen</button>
+  <p id="message"></p>
+
   <a href="/">Zurück zur Startseite</a>
 </div>
 </body>

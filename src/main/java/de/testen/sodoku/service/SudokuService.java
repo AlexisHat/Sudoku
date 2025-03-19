@@ -1,6 +1,5 @@
 package de.testen.sodoku.service;
 
-import de.testen.sodoku.domain.SudokuGame;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -12,7 +11,7 @@ public class SudokuService {
 
     private boolean checkRows(int[][] board) {
         for (int row = 0; row < 9; row++) {
-            if (!isValidSet(board[row])) {
+            if (isValidSet(board[row])) {
                 return false;
             }
         }
@@ -25,7 +24,7 @@ public class SudokuService {
             for (int row = 0; row < 9; row++) {
                 column[row] = board[row][col];
             }
-            if (!isValidSet(column)) {
+            if (isValidSet(column)) {
                 return false;
             }
         }
@@ -61,12 +60,10 @@ public class SudokuService {
         boolean[] seen = new boolean[9];
         for (int num : nums) {
             if (num != 0) {
-                if (seen[num - 1]) return false; // Zahl schon gesehen → Fehler
+                if (seen[num - 1]) return true; // Zahl schon gesehen → Fehler
                 seen[num - 1] = true;
             }
         }
-        return true;
+        return false;
     }
-
-
 }

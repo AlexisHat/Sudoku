@@ -18,6 +18,7 @@ async function startNewGame() {
 function renderBoard() {
     const boardElement = document.getElementById("board");
     boardElement.innerHTML = ""; // Leere das Spielfeld
+
     for (let row = 0; row < 9; row++) {
         for (let col = 0; col < 9; col++) {
             const cell = document.createElement("input");
@@ -25,7 +26,7 @@ function renderBoard() {
             cell.type = "text";
             cell.maxLength = 1;
             cell.value = board[row][col] === 0 ? "" : board[row][col];
-            cell.disabled = originalBoard[row][col] !== 0; // Fixierte Zahlen sperren
+            cell.disabled = originalBoard[row][col] !== 0;
             cell.dataset.row = row;
             cell.dataset.col = col;
             cell.addEventListener("input", updateBoard);

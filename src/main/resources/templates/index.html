@@ -4,31 +4,28 @@
     <meta charset="UTF-8">
     <title>Sudoku Spiel</title>
 
-    <!-- CSS über Thymeleaf einbinden -->
     <link rel="stylesheet" th:href="@{/styles.css}">
+    <script defer th:src="@{/sudoku.js}"></script>
+
 </head>
 <body>
-<h1>Sudoku Spiel</h1>
+<div class="container">
+    <h1>Sudoku Spiel</h1>
 
-<!-- Dropdown für Schwierigkeitsgrad -->
-<label for="difficulty">Schwierigkeit:</label>
-<select id="difficulty">
-    <option value="1">Leicht</option>
-    <option value="2" selected>Mittel</option>
-    <option value="3">Schwer</option>
-</select>
+    <label for="difficulty">Schwierigkeit:</label>
+    <select id="difficulty">
+        <option value="1">Leicht</option>
+        <option value="2" selected>Mittel</option>
+        <option value="3">Schwer</option>
+    </select>
 
-<!-- Spielfeld -->
-<div class="board" id="board"></div>
+    <div id="board"></div>
 
-<!-- Buttons -->
-<button onclick="checkSolution()">Lösung prüfen</button>
-<button onclick="resetGame()">Zurücksetzen</button>
+    <button onclick="startNewGame()">Neues Spiel</button>
+    <button onclick="checkSolution()">Lösung prüfen</button>
+    <button onclick="resetGame()">Zurücksetzen</button>
 
-<!-- Feedback-Nachricht -->
-<p id="message"></p>
-
-<!-- JavaScript über Thymeleaf -->
-<script defer th:src="@{/sudoku.js}"></script>
+    <p id="message"></p>
+</div>
 </body>
 </html>

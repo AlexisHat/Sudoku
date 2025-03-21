@@ -19,9 +19,15 @@ function renderBoard() {
     const boardElement = document.getElementById("board");
     boardElement.innerHTML = ""; // Leere das Spielfeld
 
+    const table = document.createElement("table");
+    table.className = "sudoku-board";
+
     for (let row = 0; row < 9; row++) {
+        const tr = document.createElement("tr");
         for (let col = 0; col < 9; col++) {
+            const td = document.createElement("td");
             const cell = document.createElement("input");
+
             cell.className = "cell";
             cell.type = "text";
             cell.maxLength = 1;
@@ -30,10 +36,16 @@ function renderBoard() {
             cell.dataset.row = row;
             cell.dataset.col = col;
             cell.addEventListener("input", updateBoard);
-            boardElement.appendChild(cell);
+
+            td.appendChild(cell);
+            tr.appendChild(td);
         }
+        table.appendChild(tr);
     }
+
+    boardElement.appendChild(table);
 }
+
 
 function updateBoard(event) {
     const row = event.target.dataset.row;

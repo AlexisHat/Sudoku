@@ -73,3 +73,10 @@ button {
 .cell.error {
     background-color: lightcoral; /* Fehlerhafte Zellen rot markieren */
 }
+.cell.notes-cell::placeholder {
+    font-size: 10px;
+    color: #999;
+    text-align: center;
+    line-height: 1.2;
+    white-space: pre-wrap;
+}

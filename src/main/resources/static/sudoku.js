@@ -1,5 +1,10 @@
 let originalBoard = [];
 let board = [];
+let notes = Array(9).fill(null).map(() =>
+    Array(9).fill(null).map(() => [])
+);
+
+let noteMode = false;
 
 async function startNewGame() {
     const difficulty = document.getElementById("difficulty").value;
@@ -9,15 +14,18 @@ async function startNewGame() {
         headers: { "Content-Type": "application/json" }
     });
 
-
     board = await response.json();
-    originalBoard = JSON.parse(JSON.stringify(board)); // Speichert Originalzustand für Reset
+    originalBoard = JSON.parse(JSON.stringify(board));
+    notes = Array(9).fill(null).map(() =>
+        Array(9).fill(null).map(() => [])
+    );
+
     renderBoard();
 }
 
 function renderBoard() {
     const boardElement = document.getElementById("board");
-    boardElement.innerHTML = ""; // Leere das Spielfeld
+    boardElement.innerHTML = "";
 
     const table = document.createElement("table");
     table.className = "sudoku-board";
@@ -26,21 +34,30 @@ function renderBoard() {
         const tr = document.createElement("tr");
         for (let col = 0; col < 9; col++) {
             const td = document.createElement("td");
-            const cell = document.createElement("input");
+            td.classList.add("cell-container");
 
+            const cell = document.createElement("input");
             cell.className = "cell";
             cell.type = "text";
             cell.maxLength = 1;
-            cell.value = board[row][col] === 0 ? "" : board[row][col];
-            cell.disabled = originalBoard[row][col] !== 0;
             cell.dataset.row = row;
             cell.dataset.col = col;
-            cell.addEventListener("input", updateBoard);
+            cell.disabled = originalBoard[row][col] !== 0;
 
+            if (board[row][col] === 0 && notes[row][col].length > 0) {
+                cell.classList.add("notes-cell");
+                cell.value = "";
+                cell.placeholder = notes[row][col].sort().join("");
+            } else {
+                cell.value = board[row][col] === 0 ? "" : board[row][col];
+                cell.placeholder = "";
+            }
 
+            cell.addEventListener("input", handleInput);
             cell.addEventListener("mouseenter", highlightSameNumbers);
             cell.addEventListener("mouseleave", clearHighlights);
-
+            cell.addEventListener("focus", highlightSameNumbers);
+            cell.addEventListener("blur", clearHighlights);
 
             td.appendChild(cell);
             tr.appendChild(td);
@@ -51,15 +68,37 @@ function renderBoard() {
     boardElement.appendChild(table);
 }
 
+function handleInput(event) {
+    const row = parseInt(event.target.dataset.row);
+    const col = parseInt(event.target.dataset.col);
+    const val = event.target.value;
 
-function updateBoard(event) {
-    const row = event.target.dataset.row;
-    const col = event.target.dataset.col;
-    board[row][col] = event.target.value ? parseInt(event.target.value) : 0;
+    if (noteMode) {
+        event.target.value = ""; // Notizen erscheinen als placeholder
+        const num = parseInt(val);
+        if (isNaN(num) || num < 1 || num > 9) return;
+
+        const idx = notes[row][col].indexOf(num);
+        if (idx === -1) {
+            notes[row][col].push(num);
+        } else {
+            notes[row][col].splice(idx, 1);
+        }
+    } else {
+        const num = parseInt(val);
+        board[row][col] = isNaN(num) ? 0 : num;
+        notes[row][col] = [];
+    }
+
+    renderBoard();
 }
 
 function resetGame() {
     board = JSON.parse(JSON.stringify(originalBoard));
+    notes = Array(9).fill(null).map(() =>
+        Array(9).fill(null).map(() => [])
+    );
+
     renderBoard();
     document.getElementById("message").innerText = "";
 }
@@ -138,4 +177,18 @@ function clearHighlights() {
     });
 }
 
-window.onload = startNewGame; // Starte ein neues Spiel beim Laden der Seite
+function toggleNoteMode() {
+    noteMode = !noteMode;
+    const btn = document.getElementById("noteToggle");
+    btn.innerText = noteMode ? "✏️ Notizmodus: AN" : "✏️ Notizmodus: AUS";
+}
+
+window.onload = async () => {
+    await startNewGame();
+    const toggleBtn = document.createElement("button");
+    toggleBtn.id = "noteToggle";
+    toggleBtn.innerText = "✏️ Notizmodus: AUS";
+    toggleBtn.addEventListener("click", toggleNoteMode);
+    document.getElementById("controls").appendChild(toggleBtn);
+};
+

@@ -37,6 +37,11 @@ function renderBoard() {
             cell.dataset.col = col;
             cell.addEventListener("input", updateBoard);
 
+
+            cell.addEventListener("mouseenter", highlightSameNumbers);
+            cell.addEventListener("mouseleave", clearHighlights);
+
+
             td.appendChild(cell);
             tr.appendChild(td);
         }
@@ -85,7 +90,7 @@ function highlightErrors() {
         const row = parseInt(cell.dataset.row);
         const col = parseInt(cell.dataset.col);
         if (!isValidMove(row, col, board[row][col])) {
-            cell.style.backgroundColor = "lightcoral"; // Fehlerhafte Zellen rot markieren
+            cell.style.backgroundColor = "lightcoral";
         }
     });
 }
@@ -96,13 +101,12 @@ function resetCellColors() {
     });
 }
 
-// Lokale Validierung für die Eingaben im Browser (optional)
 function isValidMove(row, col, num) {
     if (num === 0) return true;
 
     for (let i = 0; i < 9; i++) {
-        if (i !== col && board[row][i] === num) return false; // Prüfe Zeile
-        if (i !== row && board[i][col] === num) return false; // Prüfe Spalte
+        if (i !== col && board[row][i] === num) return false;
+        if (i !== row && board[i][col] === num) return false;
     }
 
     const startRow = Math.floor(row / 3) * 3;
@@ -110,12 +114,28 @@ function isValidMove(row, col, num) {
     for (let i = 0; i < 3; i++) {
         for (let j = 0; j < 3; j++) {
             if (startRow + i !== row && startCol + j !== col && board[startRow + i][startCol + j] === num) {
-                return false; // Prüfe 3×3 Block
+                return false;
             }
         }
     }
     return true;
 }
 
+function highlightSameNumbers(event) {
+    const value = event.target.value;
+    if (!value) return;
+
+    document.querySelectorAll(".cell").forEach(cell => {
+        if (cell.value === value) {
+            cell.classList.add("same-number");
+        }
+    });
+}
+
+function clearHighlights() {
+    document.querySelectorAll(".cell").forEach(cell => {
+        cell.classList.remove("same-number");
+    });
+}
 
 window.onload = startNewGame; // Starte ein neues Spiel beim Laden der Seite

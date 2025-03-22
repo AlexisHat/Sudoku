@@ -68,7 +68,7 @@ function renderBoard() {
     boardElement.appendChild(table);
 }
 
-function handleInput(event) {
+async function handleInput(event) {
     const row = parseInt(event.target.dataset.row);
     const col = parseInt(event.target.dataset.col);
     const val = event.target.value;
@@ -91,7 +91,12 @@ function handleInput(event) {
     }
 
     renderBoard();
+
+    if (isBoardFull()) {
+        await checkSolution();
+    }
 }
+
 
 function resetGame() {
     board = JSON.parse(JSON.stringify(originalBoard));
@@ -182,6 +187,11 @@ function toggleNoteMode() {
     const btn = document.getElementById("noteToggle");
     btn.innerText = noteMode ? "✏️ Notizmodus: AN" : "✏️ Notizmodus: AUS";
 }
+
+function isBoardFull() {
+    return board.every(row => row.every(num => num >= 1 && num <= 9));
+}
+
 
 window.onload = async () => {
     await startNewGame();

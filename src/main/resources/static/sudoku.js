@@ -97,7 +97,6 @@ async function handleInput(event) {
     }
 }
 
-
 function resetGame() {
     board = JSON.parse(JSON.stringify(originalBoard));
     notes = Array(9).fill(null).map(() =>
